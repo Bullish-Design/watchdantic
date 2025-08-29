@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "watchdantic"
+version = "0.1.0"
+description = "Decorator-based filesystem watchers combining watchdog and Pydantic."
+authors = [{ name = "Watchdantic Authors", email = "devnull@example.com" }]
+requires-python = ">=3.10"
+dependencies = [
+  "watchdog>=3.0.0",
+  "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+  "pytest-html",
+  "ruff",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+
+
