@@ -29,6 +29,11 @@ default_patterns = [
     "*.lock",
     ".tmuxp*",
     "src/scripts/repo_dump.py",
+    "src/archive*",
+    ".agents/*",
+    ".pytest_cache/*",
+    "devenv*",
+    "src/examples*",
 ]
 
 
@@ -129,7 +134,7 @@ FILE: {relative_path}
                 except Exception as e:
                     outfile.write(f"[ERROR READING FILE: {e}]\n\n")
 
-        print(f"Combined {len(files_to_process)} files into {output_file}")
+        print(f"    Combined {len(files_to_process)} files into {output_file}")
 
 
 def main():
@@ -141,11 +146,12 @@ def main():
 
     args = parser.parse_args()
 
-    print(f"\n\nArguments: {args}\n")
-    print(f"    input: {args.input_dir}")
-    print(f"   output: {args.output_dir}")
-    print(f"   ignore: {args.ignore}\n\n")
+    # print(f"\n\nArguments: {args}\n")
+    # print(f"    input: {args.input_dir}")
+    # print(f"   output: {args.output_dir}")
+    # print(f"   ignore: {args.ignore}\n\n")
 
+    print(f"\nCombining files from {args.input_dir} into {args.output_dir}...")
     ignore_list = default_patterns + args.ignore
 
     try:

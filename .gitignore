@@ -5,6 +5,7 @@ __pycache__/
 *.agents**
 # C extensions
 *.so
+**archive**
 
 # Distribution / packaging
 .Python

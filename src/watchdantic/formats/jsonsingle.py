@@ -15,18 +15,14 @@ logger = logging.getLogger("watchdantic.formats.jsonsingle")
 
 class JsonSingle(FileFormatBase):
     """Handler for `.json` files containing a single object or an array of objects.
-
     Parsing:
       - If file contains a JSON object, it is treated as a single model and returned as a 1-item list.
       - If file contains a JSON array, each item is validated into a model and returned as a list.
       - Empty arrays are supported and return an empty list.
       - Invalid JSON raises :class:`FileFormatError`.
       - Pydantic validation errors are not wrapped and will propagate.
-
     Writing:
-      - 0 models -> write `[]` (empty array)
-      - 1 model  -> write a JSON object
-      - N models -> write a JSON array of objects
+      - All model lists are written as a JSON array (e.g., `[]`, `[{...}]`, `[{...}, {...}]`).
 
     All output uses compact JSON for consistency.
     """
@@ -36,19 +32,16 @@ class JsonSingle(FileFormatBase):
 
     def read_models(self, file_path: Path, model_type: Type[BaseModel]) -> List[BaseModel]:
         """Read models from a JSON file.
-
         Parameters
         ----------
         file_path:
             The path to the JSON file.
         model_type:
             The Pydantic model class used to validate the JSON content.
-
         Returns
         -------
         list[BaseModel]
             A list of successfully parsed and validated models.
-
         Raises
         ------
         FileFormatError
@@ -64,7 +57,6 @@ class JsonSingle(FileFormatBase):
 
     def parse(self, content: str, model_class: Type[BaseModel]) -> List[BaseModel]:
         """Parse JSON content into a list of validated model instances.
-
         Args:
             content: Raw JSON file content as string
             model_class: Pydantic model class for validation
@@ -103,30 +95,23 @@ class JsonSingle(FileFormatBase):
         return models
 
     def write(self, models: List[BaseModel]) -> str:
-        """Serialize models to JSON string.
+        """Serialize models to a JSON array string.
 
         Args:
             models: List of Pydantic models to serialize
 
         Returns:
-            JSON string representation
+            JSON string representation (always as an array).
 
         Raises:
             FileFormatError: If serialization fails
         """
-        logger.debug(f"Writing {len(models)} models to JSON")
+        logger.debug(f"Writing {len(models)} models to JSON array")
 
         try:
-            if len(models) == 0:
-                payload = "[]"
-                logger.debug("Writing empty array for 0 models")
-            elif len(models) == 1:
-                payload = json.dumps(models[0].model_dump(), ensure_ascii=False, separators=(",", ":"))
-                logger.debug("Writing single object for 1 model")
-            else:
-                payload = json.dumps([m.model_dump() for m in models], ensure_ascii=False, separators=(",", ":"))
-                logger.debug(f"Writing array for {len(models)} models")
-
+            # Always serialize as an array for consistency.
+            dumped_models = [m.model_dump(mode="json") for m in models]
+            payload = json.dumps(dumped_models, ensure_ascii=False, separators=(",", ":"))
         except (TypeError, ValueError) as e:
             # JSON serialization issue (e.g., non-serializable value)
             raise FileFormatError(f"Failed to serialize models to JSON: {e}") from e

@@ -8,7 +8,12 @@ from typing import List
 from datetime import datetime
 
 from pydantic import BaseModel, Field
-from watchdantic import Watchdantic
+from watchdantic import Watchdantic, WatchdanticConfig
+from watchdantic.core.logging import WatchdanticLogger
+
+WatchdanticLogger.model_rebuild()
+
+# config = WatchdanticConfig()
 
 
 class LogEntry(BaseModel):
@@ -84,4 +89,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

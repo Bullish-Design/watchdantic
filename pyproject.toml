@@ -23,16 +23,24 @@ dev = [
 
 [tool.pytest.ini_options]
 addopts = "-q"
-testpaths = ["tests"]
+#addopts = ["--import-mode=importlib", "-q"]
+testpaths = ["src/tests"]
 log_cli = true
 log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
 log_cli_date_format = "%Y-%m-%d %H:%M:%S"
-
+# Avoid package-style imports for tests (fixes ModuleNotFoundError on tests.*)
+# Don't descend into the legacy archive (also avoids its own conftest)
+norecursedirs = [
+  "tests", "src/archive", "build", "dist", ".git", ".venv", "venv", ".devenv"
+]
 
 [tool.ruff]
 line-length = 120
 target-version = "py310"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/watchdantic", "src/examples"]
 
 
 

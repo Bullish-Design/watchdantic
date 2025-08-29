@@ -108,7 +108,7 @@ class JsonLines(FileFormatBase):
         lines: List[str] = []
         for idx, model in enumerate(models, start=1):
             try:
-                payload = model.model_dump()
+                payload = model.model_dump(mode="json")
                 line = json.dumps(payload, separators=(",", ":"), ensure_ascii=False)
             except (TypeError, ValueError) as exc:
                 raise FileFormatError(f"Failed to serialize model at index {idx}: {exc}") from exc

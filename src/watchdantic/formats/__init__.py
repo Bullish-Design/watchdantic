@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-"""Formats subpackage for Watchdantic.
+from .jsonlines import JsonLines
+from .jsonsingle import JsonSingle  
+from .detection import FormatDetector
 
-Holds pluggable file format handlers (JSONL, single JSON, etc.).
-"""
+__all__ = ["JsonLines", "JsonSingle", "FormatDetector"]
