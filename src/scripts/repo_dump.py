@@ -18,12 +18,15 @@ from pydantic import BaseModel, Field, field_validator
 
 default_patterns = [
     "*.pyc",
+    ".ruff_cache*",
+    ".envrc",
     "__pycache__",
     ".git",
     ".gitignore",
     "*.log",
     "*.tmp",
     ".devenv*",
+    "*.venv*",
     "*.env",
     ".git*",
     "*.lock",
@@ -34,6 +37,9 @@ default_patterns = [
     ".pytest_cache/*",
     "devenv*",
     "src/examples*",
+    "buf.gen*",
+    "*.hidden*",
+    "*.db",
 ]
 
 
@@ -99,7 +105,7 @@ FILE: {relative_path}
     def combine_files(self, version: Optional[int] = None) -> None:
         """Combine all non-ignored files into a single output file."""
         self.config.output_dir.mkdir(parents=True, exist_ok=True)
-        if version:
+        if version is not None and version > 0:
             output_file = self.config.output_dir / f"{version:02d}_{self.repo_name}_full_llms.txt"
         else:
             output_file = self.config.output_dir / f"{self.repo_name}_full_llms.txt"
@@ -141,7 +147,7 @@ def main():
     parser = argparse.ArgumentParser(description="Combine repository files into a single text file for LLM consumption")
     parser.add_argument("input_dir", help="Input directory path")
     parser.add_argument("output_dir", help="Output directory path")
-    parser.add_argument("--ver", default=None, help="Version num to include in output file name")
+    parser.add_argument("--ver", nargs="?", default=0, help="Version num to include in output file name")
     parser.add_argument("--ignore", nargs="*", default=[], help="Additional ignore patterns (supports wildcards)")
 
     args = parser.parse_args()
