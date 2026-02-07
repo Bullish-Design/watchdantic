@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "watchdantic"
 version = "0.2.0"
 description = "Config-driven file watcher with shell command actions, powered by watchfiles + Pydantic."
-authors = [{ name = "Watchdantic Authors", email = "devnull@example.com" }]
+authors = [{ name = "Bullish Design", email = "BullishDesignLLC@gmail.com" }]
 requires-python = ">=3.11"
 dependencies = [
   "watchfiles>=0.21",
