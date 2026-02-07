@@ -26,11 +26,11 @@ share/python-wheels/
 *.egg
 MANIFEST
 **.env
-**.nix
+.nix
 **.lock
 **.tmuxp**
-**devenv**
-**direnv**
+**devenv/**
+**direnv/**
 .python-version
 
 # Personal Paranoia:
