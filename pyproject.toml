@@ -4,14 +4,17 @@ build-backend = "hatchling.build"
 
 [project]
 name = "watchdantic"
-version = "0.1.0"
-description = "Decorator-based filesystem watchers combining watchdog and Pydantic."
+version = "0.2.0"
+description = "Config-driven file watcher with shell command actions, powered by watchfiles + Pydantic."
 authors = [{ name = "Watchdantic Authors", email = "devnull@example.com" }]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-  "watchdog>=3.0.0",
+  "watchfiles>=0.21",
   "pydantic>=2.0.0",
 ]
+
+[project.scripts]
+watchdantic = "watchdantic.cli:main"
 
 [project.optional-dependencies]
 dev = [
@@ -29,10 +32,6 @@ log_cli_level = "INFO"
 log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
 log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
-
 [tool.ruff]
 line-length = 120
-target-version = "py310"
-
-
-
+target-version = "py311"
