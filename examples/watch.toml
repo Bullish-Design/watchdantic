@@ -1,0 +1,58 @@
+version = 1
+
+[engine]
+repo_root = "."
+debounce_ms = 300
+use_default_filter = true
+ignore_dirs = [".git", ".venv", "__pycache__"]
+ignore_globs = ["**/*.pyc", "**/.DS_Store"]
+log_level = "INFO"
+
+[[watch]]
+name = "repo"
+paths = ["."]
+debounce_ms = 300
+
+[[action]]
+name = "build_docs"
+type = "command"
+cmd = ["bash", "-lc", "make -C docs html"]
+cwd = "."
+timeout_s = 120
+env = { "PYTHONUNBUFFERED" = "1" }
+
+[[action]]
+name = "run_tests"
+type = "command"
+cmd = ["pytest", "-x", "-q"]
+timeout_s = 300
+
+[[action]]
+name = "echo_change"
+type = "command"
+cmd = ["echo", "File changed!"]
+
+[[rule]]
+name = "docs_on_md_change"
+watch = "repo"
+on = ["added", "modified"]
+match = ["docs/**/*.md", "content/**/*.md"]
+exclude = ["docs/_build/**"]
+do = ["build_docs"]
+continue_on_error = false
+
+[[rule]]
+name = "test_on_py_change"
+watch = "repo"
+on = ["added", "modified"]
+match = ["src/**/*.py", "tests/**/*.py"]
+do = ["run_tests"]
+continue_on_error = false
+
+[[rule]]
+name = "notify_deletes"
+watch = "repo"
+on = ["deleted"]
+match = ["**/*"]
+do = ["echo_change"]
+continue_on_error = true
