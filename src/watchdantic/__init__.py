@@ -1,6 +1,5 @@
+"""watchdantic — config-driven file watcher with shell command actions."""
+
 from __future__ import annotations
 
-from watchdantic.core.watcher import Watchdantic
-from watchdantic.core.models import WatchdanticConfig
-
-__all__ = ["Watchdantic", "WatchdanticConfig"]
+__version__ = "0.2.0"
